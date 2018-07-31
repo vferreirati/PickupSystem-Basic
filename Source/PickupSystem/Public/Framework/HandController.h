@@ -53,4 +53,6 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "HandController")
 	void UpdateHandState();
+
+	AActor* GetNearestObject();
 };

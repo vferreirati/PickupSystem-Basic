@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HandController.h"
+#include "BasePickup.h"
 #include "Components/SceneComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
@@ -52,9 +53,38 @@ void AHandController::SetHand(EControllerHand Hand) {
 void AHandController::OnGrab() {
 	HandState = EHandState::Grab;
 	UpdateHandState();
+
+	// Get Nearest Object to GrabSphere
+	AActor* NearestObject = GetNearestObject();
+
+	if (NearestObject) {
+		UE_LOG(LogTemp, Warning, TEXT("Nearest object is: %s"), *NearestObject->GetName())
+	}
+
+	// Check if it's a pickup actor
+		// if so, pick it up
 }
 
 void AHandController::OnRelease() {
 	HandState = EHandState::Open;
 	UpdateHandState();
+}
+
+AActor* AHandController::GetNearestObject() {
+	TArray<AActor*> Actors;
+	GrabSphere->GetOverlappingActors(Actors, ABasePickup::StaticClass());
+
+	AActor* NearestActor = nullptr;
+	float MinorDistance = 50000.f;
+	FVector GrabSphereLocation = GrabSphere->GetComponentLocation();
+	for (AActor* Actor : Actors) {
+		FVector ActorLocation = Actor->GetActorLocation();
+		float CurrentDistance = (GrabSphereLocation - ActorLocation).Size();
+		if (CurrentDistance < MinorDistance) {
+			NearestActor = Actor;
+			MinorDistance = CurrentDistance;
+		}
+	}
+
+	return NearestActor;
 }
