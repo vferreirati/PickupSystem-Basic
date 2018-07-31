@@ -40,6 +40,7 @@ void AHandController::Tick(float DeltaTime)
 
 }
 
-void AHandController::SetHand(EControllerHand Hand) {
-	MotionControllerComp->SetTrackingSource(Hand);
+void AHandController::SetAsRightHand() {
+	MotionControllerComp->SetTrackingSource(EControllerHand::Right);
+	HandMesh->SetRelativeScale3D(FVector(1, 1, -1));
 }

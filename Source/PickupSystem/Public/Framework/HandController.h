@@ -17,7 +17,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SetHand(EControllerHand Hand);
+	void SetAsRightHand();
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")

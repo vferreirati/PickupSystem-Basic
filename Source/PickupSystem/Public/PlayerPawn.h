@@ -28,10 +28,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UCameraComponent* CameraComp;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<class AHandController> HandControllerClass;
+
+	class AHandController* ControllerLeft;
+	class AHandController* ControllerRight;
+
 protected:	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	
+	// Spawns both left and right controllers and attach to root component
+	void SpawnControllers();
 	
 };
