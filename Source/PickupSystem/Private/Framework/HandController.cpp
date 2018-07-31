@@ -57,17 +57,20 @@ void AHandController::OnGrab() {
 	// Get Nearest Object to GrabSphere
 	AActor* NearestObject = GetNearestObject();
 
-	if (NearestObject) {
-		UE_LOG(LogTemp, Warning, TEXT("Nearest object is: %s"), *NearestObject->GetName())
-	}
-
 	// Check if it's a pickup actor
-		// if so, pick it up
+	// if so, pick it up
+	if (ABasePickup* Pickup = Cast<ABasePickup>(NearestObject)) {
+		Pickup->OnPickup(MotionControllerComp);
+		CurrentObject = Pickup;
+	}	
 }
 
 void AHandController::OnRelease() {
 	HandState = EHandState::Open;
 	UpdateHandState();
+
+	CurrentObject->OnRelease();
+	CurrentObject = nullptr;
 }
 
 AActor* AHandController::GetNearestObject() {

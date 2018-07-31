@@ -47,6 +47,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "HandController")
 	EHandState HandState;
 
+	class ABasePickup* CurrentObject;
+
 protected:	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

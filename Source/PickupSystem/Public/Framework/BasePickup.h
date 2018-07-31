@@ -18,6 +18,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void OnPickup(class USceneComponent* AttachTo);
+
+	virtual void OnRelease();
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USceneComponent* RootComp;
@@ -28,9 +32,4 @@ protected:
 protected:	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-
-	virtual void OnPickup(class USceneComponent* AttachTo);
-
-	virtual void OnRelease();
 };
