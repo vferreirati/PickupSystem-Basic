@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BasePickup.h"
+#include "HandController.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
 
@@ -33,9 +34,9 @@ void ABasePickup::Tick(float DeltaTime)
 }
 
 void ABasePickup::OnPickup(USceneComponent* AttachTo) {
-	UE_LOG(LogTemp, Warning, TEXT("%s wants to pick me up!"), *AttachTo->GetName());
+	AttachToComponent(AttachTo, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 void ABasePickup::OnRelease() {
-	// TODO: Detach from actor
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 }

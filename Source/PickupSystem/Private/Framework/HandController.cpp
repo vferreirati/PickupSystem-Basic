@@ -69,7 +69,11 @@ void AHandController::OnRelease() {
 	HandState = EHandState::Open;
 	UpdateHandState();
 
-	CurrentObject->OnRelease();
+	// If we have a grabbed object and this object is grabbed by us
+	if (CurrentObject && CurrentObject->GetRootComponent()->GetAttachParent() == MotionControllerComp) {
+		CurrentObject->OnRelease();
+	}	
+
 	CurrentObject = nullptr;
 }
 
