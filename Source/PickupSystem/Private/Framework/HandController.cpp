@@ -23,14 +23,14 @@ AHandController::AHandController()
 	HandMesh->SetupAttachment(MotionControllerComp);
 
 	GrabSphere = CreateDefaultSubobject<USphereComponent>(TEXT("GrabSphere"));
-	GrabSphere->SetupAttachment(HandMesh);
+	GrabSphere->SetupAttachment(MotionControllerComp);
 }
 
 // Called when the game starts or when spawned
 void AHandController::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	HandState = EHandState::Open;
 }
 
 // Called every frame
@@ -40,7 +40,21 @@ void AHandController::Tick(float DeltaTime)
 
 }
 
-void AHandController::SetAsRightHand() {
-	MotionControllerComp->SetTrackingSource(EControllerHand::Right);
-	HandMesh->SetRelativeScale3D(FVector(1, 1, -1));
+void AHandController::SetHand(EControllerHand Hand) {
+	MotionControllerComp->SetTrackingSource(Hand);
+	
+	// Invert the hand if left.
+	if (Hand == EControllerHand::Left) {
+		HandMesh->SetRelativeScale3D(FVector(1, 1, -1));
+	}	
+}
+
+void AHandController::OnGrab() {
+	HandState = EHandState::Grab;
+	UpdateHandState();
+}
+
+void AHandController::OnRelease() {
+	HandState = EHandState::Open;
+	UpdateHandState();
 }

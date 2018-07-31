@@ -41,4 +41,9 @@ protected:
 	// Spawns both left and right controllers and attach to root component
 	void SpawnControllers();
 	
+	// Grab input functions
+	void GrabLeft();
+	void ReleaseLeft();
+	void GrabRight();
+	void ReleaseRight();
 };

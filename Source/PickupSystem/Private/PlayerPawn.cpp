@@ -44,6 +44,11 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Grab input bind
+	PlayerInputComponent->BindAction("GrabLeft", IE_Pressed, this, &APlayerPawn::GrabLeft);
+	PlayerInputComponent->BindAction("GrabLeft", IE_Released, this, &APlayerPawn::ReleaseLeft);
+	PlayerInputComponent->BindAction("GrabRight", IE_Pressed, this, &APlayerPawn::GrabRight);
+	PlayerInputComponent->BindAction("GrabRight", IE_Released, this, &APlayerPawn::ReleaseRight);
 }
 
 void APlayerPawn::SpawnControllers() {
@@ -53,8 +58,34 @@ void APlayerPawn::SpawnControllers() {
 
 	ControllerLeft = GetWorld()->SpawnActor<AHandController>(HandControllerClass, SpawnParams);
 	ControllerLeft->AttachToComponent(RootComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	ControllerLeft->SetHand(EControllerHand::Left);
 
 	ControllerRight = GetWorld()->SpawnActor<AHandController>(HandControllerClass, SpawnParams);
 	ControllerRight->AttachToComponent(RootComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
-	ControllerRight->SetAsRightHand();
+	ControllerRight->SetHand(EControllerHand::Right);
+	
+}
+
+void APlayerPawn::GrabLeft() {
+	if (ControllerLeft) {
+		ControllerLeft->OnGrab();
+	}
+}
+
+void APlayerPawn::ReleaseLeft() {
+	if (ControllerLeft) {
+		ControllerLeft->OnRelease();
+	}
+}
+
+void APlayerPawn::GrabRight() {
+	if (ControllerRight) {
+		ControllerRight->OnGrab();
+	}
+}
+
+void APlayerPawn::ReleaseRight() {
+	if (ControllerRight) {
+		ControllerRight->OnRelease();
+	}
 }
