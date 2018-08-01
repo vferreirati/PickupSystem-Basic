@@ -24,9 +24,6 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class USceneComponent* RootComp;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UStaticMeshComponent* BaseMesh;
 
 protected:	

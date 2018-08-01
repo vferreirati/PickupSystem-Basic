@@ -12,11 +12,8 @@ ABasePickup::ABasePickup()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
-	SetRootComponent(RootComp);
-
 	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseMesh"));
-	BaseMesh->SetupAttachment(RootComp);
+	BaseMesh->SetSimulatePhysics(true);
 }
 
 // Called when the game starts or when spawned
@@ -34,9 +31,11 @@ void ABasePickup::Tick(float DeltaTime)
 }
 
 void ABasePickup::OnPickup(USceneComponent* AttachTo) {
-	AttachToComponent(AttachTo, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	BaseMesh->SetSimulatePhysics(false);
+	AttachToComponent(AttachTo, FAttachmentTransformRules::KeepWorldTransform);	
 }
 
 void ABasePickup::OnRelease() {
-	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	BaseMesh->SetSimulatePhysics(true);
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);	
 }
