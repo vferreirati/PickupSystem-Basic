@@ -47,14 +47,23 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "HandController")
 	EHandState HandState;
 
+	// Current Object reference being held by this actor
 	class ABasePickup* CurrentObject;
+
+	// Is the player pressing the grip button?
+	bool bWantsToGrab;
 
 protected:	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "HandController")
+	// Checks and sets the correct hand state
 	void UpdateHandState();
 
+	// Updates the hand state on AnimationBlueprint
+	UFUNCTION(BlueprintImplementableEvent, Category = "HandController")
+	void UpdateHandAnimState();
+
+	// Gets the nearest ABasePickup Actor to GrabSphere
 	AActor* GetNearestObject();
 };

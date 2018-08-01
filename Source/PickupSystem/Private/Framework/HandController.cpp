@@ -31,14 +31,16 @@ AHandController::AHandController()
 void AHandController::BeginPlay()
 {
 	Super::BeginPlay();
-	HandState = EHandState::Open;
+	bWantsToGrab = false;
 }
 
 // Called every frame
 void AHandController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	UpdateHandState();
+	UpdateHandAnimState();	
 }
 
 void AHandController::SetHand(EControllerHand Hand) {
@@ -51,8 +53,7 @@ void AHandController::SetHand(EControllerHand Hand) {
 }
 
 void AHandController::OnGrab() {
-	HandState = EHandState::Grab;
-	UpdateHandState();
+	bWantsToGrab = true;
 
 	// Get Nearest Object to GrabSphere
 	AActor* NearestObject = GetNearestObject();
@@ -66,8 +67,7 @@ void AHandController::OnGrab() {
 }
 
 void AHandController::OnRelease() {
-	HandState = EHandState::Open;
-	UpdateHandState();
+	bWantsToGrab = false;
 
 	// If we have a grabbed object and this object is grabbed by us
 	if (CurrentObject && CurrentObject->GetRootComponent()->GetAttachParent() == MotionControllerComp) {
@@ -94,4 +94,19 @@ AActor* AHandController::GetNearestObject() {
 	}
 
 	return NearestActor;
+}
+
+void AHandController::UpdateHandState() {
+	// Set to grab if we're holding something
+	// Or the grip button is pressed
+	if (CurrentObject || bWantsToGrab) {
+		HandState = EHandState::Grab;
+		
+		// Else, if there's a grabbable object near hand
+		// set to CanGrab
+	} else if(AActor* NearestObject = GetNearestObject()) {
+		HandState = EHandState::CanGrab;
+	} else {
+		HandState = EHandState::Open;
+	}
 }
